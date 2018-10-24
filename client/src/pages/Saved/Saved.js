@@ -4,6 +4,7 @@ import { Col, Row, Container } from "../../components/Grid";
 import { List, ListArticle } from "../../components/List";
 import API from "../../utils/API";
 import socketIOClient from "socket.io-client";
+import NavSub from "../../components/NavSub";
 
 
 class Search extends Component {
@@ -23,13 +24,13 @@ class Search extends Component {
   loadArticles = () => {
     API.getArticles()
       .then(res =>
-          this.setState({articles: res.data})
-        )
+        this.setState({ articles: res.data })
+      )
       .catch(err => console.log(err));
   };
 
   deleteArticleSubmit = id => {
-    console.log("1 enter deleteArticleSubmit: "+id)
+    console.log("1 enter deleteArticleSubmit: " + id)
     API.deleteArticle(id)
       .then(res => this.loadArticles())
       .catch(err => console.log(err));
@@ -49,7 +50,13 @@ class Search extends Component {
           <Col size="md-12">
             {this.state.articles.length ? (
               <div className="devPanelPrimary">
-                <div className="queryPanel"><h4>Saved Articles</h4></div>
+                <NavSub
+                  subHeading={"Saved Articles"}
+                  optionDiv={<ul className="nav navbar-nav navbar-right">
+                    <li><a className="navSub" href="/">Go To Search</a></li>
+                  </ul>}
+                >
+                </NavSub>
                 <div className="panel-body">
                   <List>
                     {this.state.articles.map(article => (
@@ -64,15 +71,15 @@ class Search extends Component {
                   </List>
                 </div>
               </div>
-              ) : (
-              <ul className="list-group">
-                <li className="list-group-item"><h3><em>No Saved Articles</em></h3></li>
-              </ul>)
+            ) : (
+                <ul className="list-group">
+                  <li className="list-group-item"><h3><em>No Saved Articles</em></h3></li>
+                </ul>)
             }
           </Col>
         </Row>
       </Container>
-     );
+    );
   }
 }
 

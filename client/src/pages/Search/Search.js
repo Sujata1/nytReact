@@ -4,6 +4,7 @@ import { List, ListArticle } from "../../components/List";
 import { Input, FormBtn } from "../../components/Form";
 import API from "../../utils/API";
 import SaveBtn from "../../components/SaveBtn";
+import NavSub from "../../components/NavSub";
 
 class Search extends Component {
   state = {
@@ -16,24 +17,23 @@ class Search extends Component {
   searchArticles = (event) => {
     event.preventDefault();
     API.findArticles(this.state.topic, this.state.startYear, this.state.endYear)
-      .then(res => 
-          {
-          this.setState({articles: res.data.response.docs});
-          console.log(this.state.articles);
-        }
-        )
-        .catch( err => console.log(err));
+      .then(res => {
+        this.setState({ articles: res.data.response.docs });
+        console.log(this.state.articles);
+      }
+      )
+      .catch(err => console.log(err));
   };
 
   saveArticleSubmit = (headline, link, date) => {
     console.log("headline");
-      API.saveArticle({
-        headline: headline,
-        link: link,
-        date: date
-      })
-        .then(res => console.log("saved article"))
-        .catch(err => console.log(err));
+    API.saveArticle({
+      headline: headline,
+      link: link,
+      date: date
+    })
+      .then(res => console.log("saved article"))
+      .catch(err => console.log(err));
   };
 
   handleInputChange = event => {
@@ -48,36 +48,42 @@ class Search extends Component {
       <Container fluid>
         <Row>
           <Col size="md-12">
-          <div className="devPanelPrimary">
-          <div className="queryPanel"><h4>Enter Search</h4></div>
-          <div className="panel-body"> 
-            <form>
-              <h4>Topic</h4>
-              <Input
-                value={this.state.title}
-                onChange={this.handleInputChange}
-                name="topic"
-              />
-              <h4>Start Year</h4>
-              <Input
-                value={this.state.author}
-                onChange={this.handleInputChange}
-                name="startYear"
-              />
-              <h4>End Year</h4>
-              <Input
-                value={this.state.author}
-                onChange={this.handleInputChange}
-                name="endYear"
-              />
-              <FormBtn
-                disabled={!(this.state.topic && this.state.startYear && this.state.endYear)}
-                onClick={this.searchArticles}
+            <div className="devPanelPrimary">
+              <NavSub
+                subHeading={"Search Articles"}
+                optionDiv={<ul className="nav navbar-nav navbar-right">
+                  <li><a className="navSub" href="/saved">Go To Saved Articles</a></li>
+                </ul>}
               >
-                Submit
+              </NavSub>
+              <div className="panel-body">
+                <form>
+                  <h4>Topic</h4>
+                  <Input
+                    value={this.state.title}
+                    onChange={this.handleInputChange}
+                    name="topic"
+                  />
+                  <h4>Start Year</h4>
+                  <Input
+                    value={this.state.author}
+                    onChange={this.handleInputChange}
+                    name="startYear"
+                  />
+                  <h4>End Year</h4>
+                  <Input
+                    value={this.state.author}
+                    onChange={this.handleInputChange}
+                    name="endYear"
+                  />
+                  <FormBtn
+                    disabled={!(this.state.topic && this.state.startYear && this.state.endYear)}
+                    onClick={this.searchArticles}
+                  >
+                    Submit
               </FormBtn>
-            </form>
-            </div>
+                </form>
+              </div>
             </div>
           </Col>
         </Row>
@@ -100,15 +106,15 @@ class Search extends Component {
                   </List>
                 </div>
               </div>
-              ) : (
-              <ul className="list-group">
-                <li className="list-group-item"><h3><em>Enter Search to Begin</em></h3></li>
-              </ul>)
+            ) : (
+                <ul className="list-group">
+                  <li className="list-group-item"><h3><em>Enter Search to Begin</em></h3></li>
+                </ul>)
             }
           </Col>
         </Row>
       </Container>
-        
+
     );
   }
 }
